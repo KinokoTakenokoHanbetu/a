@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
-<input type="file" name="example" accept="image/jpeg, image/png">
-<script type="text/javascript">
-  function previewFile(file) {
-    // プレビュー画像を追加する要素
-    const preview = document.getElementById('preview');
-  
-    // FileReaderオブジェクトを作成
-    const reader = new FileReader();
-  
-    // ファイルが読み込まれたときに実行する
-    reader.onload = function (e) {
-      const imageUrl = e.target.result; // 画像のURLはevent.target.resultで呼び出せる
-      const img = document.createElement("img"); // img要素を作成
-      img.src = imageUrl; // 画像のURLをimg要素にセット
-      preview.appendChild(img); // #previewの中に追加
-    }
-  
-    // いざファイルを読み込む
-    reader.readAsDataURL(file);
-  }
-  
-  
-  // <input>でファイルが選択されたときの処理
-  const fileInput = document.getElementById('example');
-  const handleFileSelect = () => {
-    const files = fileInput.files;
-    for (let i = 0; i < files.length; i++) {
-      previewFile(files[i]);
-    }
-  }
-  fileInput.addEventListener('change', handleFileSelect);
+    <canvas id="TestCanvas" width="400" height="300"></canvas>
+<img id="TestImage" src=".\DSC_0006.JPG" style="display:none;">
+
+<script>
+    // canvasの取得。
+    var canvas = document.getElementById("TestCanvas");
+    // 2Dコンテキストの取得。
+    var context = canvas.getContext("2d");               
+    // 画像の取得。
+    var image = document.getElementById("TestImage");
+
+    // 画像の読み込み時に。
+    image.onload = function () {
+
+        // 画像を表示。
+        context.drawImage(image, 0, 0);
+
+    };
+
+    // 座標(100,100)
+    var x = 100;
+    var y = 100;
+
+    // 指定座標から幅1,高さ1のImageDataオブジェクトの取得。
+    var imagedata = context.getImageData(x, y, 1, 1);
+
+    // RGBAの取得。
+    var r = imagedata.data[0];
+    var g = imagedata.data[1];
+    var b = imagedata.data[2];
+    var a = imagedata.data[3];
+
+    document.write("<h2>", r, g, b, a, "</h2>")
+
 </script>
-  
 </body>
 </html>
