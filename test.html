@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<canvas id="MyCanvas" width="300" height="300"></canvas>
+<img id="img_test" src="00010058.JPG" style="display:none;">
+<div id="msg"></div>
+<script>
+ 
+  // RGBから#ffffff形式へ変換する
+  function RGB2bgColor(r,g,b) {
+ 
+    r = r.toString(16);
+    if (r.length == 1) r = "0" + r;
+ 
+    g = g.toString(16);
+    if (g.length == 1) g = "0" + g;
+ 
+    b = b.toString(16);
+    if (b.length == 1) b = "0" + b;
+ 
+    return '#' + r + g + b;  
+  }  
+  
+  var canvas = document.getElementById("MyCanvas");
+  
+  if (canvas.getContext) {
+    // コンテキストの取得
+    var ctx = canvas.getContext("2d");                
+    var image = document.getElementById("img_test");
+ 
+    image.onload = function () {
+      
+      // キャンバスをクリア
+      ctx.clearRect(0, 0, canvas.width, canvas.height); 
+      
+      // キャンバスの中心に画像を描画
+      var x = (canvas.width - image.width) / 2;
+      var y = (canvas.height - image.height) / 2;      
+      ctx.drawImage(image, x, y);
+    };
+  }
+ 
+  canvas.onclick = function(evt){
+  
+    //  マウス座標の取得
+    var x = parseInt(evt.offsetX);
+    var y = parseInt(evt.offsetY);
+ 
+    //  指定座標のImageDataオブジェクトの取得 
+    var imagedata = ctx.getImageData(x, y, 1, 1);
+ 
+    //  RGBAの取得
+    var r = imagedata.data[0];        
+    var g = imagedata.data[1];
+    var b = imagedata.data[2];
+    var a = imagedata.data[3];
+    
+    canvas.style.backgroundColor = RGB2bgColor(r,g,b);
+    document.getElementById("msg").innerHTML = 
+      "Red: " + r + "  Green: " + g + "  Blue: " + b + "  Alpha: " + a;    
+  }
+  
+</script>
+</body>
+</html> 
